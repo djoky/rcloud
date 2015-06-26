@@ -1,5 +1,3 @@
-
-
 define(['angular'], function(angular) {
 
    'use strict';
@@ -8,6 +6,24 @@ define(['angular'], function(angular) {
         console.log(err);
         var s = err.toString().replace(/\n/g, '');
         return /.*: +(.*)R trace/.exec(s)[1];
+    }
+
+    function promise_for(condition, action, value) {
+        if(!condition(value))
+            return value;
+        return action(value).then(promise_for.bind(null, condition, action));
+    }
+
+    // like Promise.each but each promise is not *started* until the last one completes
+    function promise_sequence(collection, operator) {
+        return promise_for(
+            function(i) {
+                return i < collection.length;
+            },
+            function(i) {
+                return operator(collection[i]).return(++i);
+            },
+        0);
     }
 
     var logger = RCloud.UI.notebook_protection_logger;
@@ -183,7 +199,7 @@ define(['angular'], function(angular) {
                             GroupsService.setNotebookGroup($scope.notebookGistName, $scope.selectedUserGroup.id )
                             .then(function(data){
                                 //console.log('data is '+data);
-                                logger.clear();
+                                $scope.cancel();
                             })
                             .catch(function(e){
                                 logger.warn(extract_error(e));
@@ -268,6 +284,10 @@ define(['angular'], function(angular) {
         };
 
         $scope.renameGroup = function() {
+
+            if(!$scope.selectedAdminGroup || !$scope.allAdminGroups.length)
+                return;
+
             var pr = prompt("Rename group "+$scope.selectedAdminGroup.name , $scope.selectedAdminGroup.name);
             if(pr != null) {
                 var r = confirm('Are you sure you want to rename group "'+$scope.selectedAdminGroup.name+' to "'+pr+'"?');
@@ -430,30 +450,44 @@ define(['angular'], function(angular) {
                     if(removedAdmins.length) {
                         for(var q = 0; q < removedAdmins.length; q++) {
                             //create a promise for each action
-                            allPromises.push( GroupsService.removeGroupUser($scope.selectedAdminGroup.id, removedAdmins[q]));
+                            allPromises.push(function(){
+                                return GroupsService.removeGroupUser($scope.selectedAdminGroup.id, removedAdmins[q]);
+                            });
+
+                        
                         }
                     }
                     if(addedAdmins.length) {
                         for(var w = 0; w < addedAdmins.length; w++) {
                             //create a promise for each action
-                            allPromises.push( GroupsService.addGroupUser($scope.selectedAdminGroup.id, addedAdmins[w], true));
+                            allPromises.push(function(){
+                                return GroupsService.addGroupUser($scope.selectedAdminGroup.id, addedAdmins[w], true);
+                            });
                         }
                     }
                     if(removedMembers.length) {
                         for(var e = 0; e < removedMembers.length; e++) {
                             //create a promise for each action
-                            allPromises.push( GroupsService.removeGroupUser($scope.selectedAdminGroup.id, removedMembers[e]));
+                            allPromises.push(function(){
+                               return GroupsService.removeGroupUser($scope.selectedAdminGroup.id, removedMembers[e]);
+                            });
                         }
                     }
                     if(addedMembers.length) {
                         for(var r = 0; r < addedMembers.length; r++) {
                             //create a promise for each action
                             //var prom = ;
-                            allPromises.push( GroupsService.addGroupUser($scope.selectedAdminGroup.id, addedMembers[r], false) );
+                            allPromises.push(function(){
+                                return GroupsService.addGroupUser($scope.selectedAdminGroup.id, addedMembers[r], false) 
+                            });
                         }
                     }
 
-                    Promise.all(allPromises)
+                    var seq = promise_sequence(allPromises, function(f) { 
+                        return f(); 
+                    });
+
+                    seq
                     .then(function() {
                         //console.log('pushing member data succeeded');
                         $scope.cancel();
@@ -580,9 +614,11 @@ define(['angular'], function(angular) {
             return $q(function(resolve, reject) {
 
                 if(id === null || id === 'private') {
-                    $scope.$evalAsync(function() {
-                        $scope.selectedAdminGroup = $scope.allAdminGroups[0];
-                    });
+                    if($scope.allAdminGroups.length) {
+                        $scope.$evalAsync(function() {
+                            $scope.selectedAdminGroup = $scope.allAdminGroups[0];
+                        });
+                    }
                     $timeout(function() {
                         resolve();
                     }, 50);

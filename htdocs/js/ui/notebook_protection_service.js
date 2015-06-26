@@ -45,20 +45,14 @@ define(['angular'], function(angular){
 
         this.removeGroupUser = function(groupid, user){
             return rcloud.protection.remove_cryptgroup_user(groupid, user);
+            // .catch(function(e) {
+            //     console.warn(e);
+            // });
         };
 
         this.getUsersGroups = function(user){
             return rcloud.protection.get_user_cryptgroups(user);
         };
-
-        //this.removeUserFromGroup
-
-
-        // rcloud.protection.remove_cryptgroup_user = function(groupid, user) {
-        //     return rcloud_ocaps.protection.remove_cryptgroup_userAsync(groupid, user);
-        // };
-
-
 
     });
 
