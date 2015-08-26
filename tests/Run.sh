@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 sudo libreoffice --headless --convert-to csv Details.ods --outdir 
 
