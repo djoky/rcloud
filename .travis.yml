@@ -26,7 +26,10 @@ before_install:
   - "wget http://download.slimerjs.org/v0.9/0.9.1/slimerjs-0.9.1.zip"
   - "unzip slimerjs-0.9.1.zip"
   - "mv slimerjs-0.9.1 ./slimerjs"
-
+  - chmod 755 ./tests/Automation_Dependency_Install.sh
+  - ./tests/Automation_Dependency_Install.sh
+  - chmod 755 ./tests/Run.sh
+  - chmod 755 ./tests/Reports
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh setup_rcloud_config
@@ -44,8 +47,8 @@ on_failure:
 
 notifications:
   email:
-    on_success: change
-    on_failure: change
+    on_success: true
+    on_failure: true
 
 # whitelist
 branches:
