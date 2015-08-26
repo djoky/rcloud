@@ -30,6 +30,7 @@ before_install:
   - ./tests/Automation_Dependency_Install.sh
   - chmod 755 ./tests/Run.sh
   - chmod 755 ./tests/Reports
+  - chmod 755 ./tests/dataframe_div
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh setup_rcloud_config
