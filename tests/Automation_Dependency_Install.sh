@@ -23,10 +23,10 @@ else
     fi
 
     #Creating directory
-    read -p "Enter the directory path for installation: " path
+    #read -p "Enter the directory path for installation: " path
 
     cd
-    cd ${path}
+    #cd ${path}
     mkdir Automation_Installation    
     cd Automation_Installation
     pwd
@@ -50,8 +50,8 @@ else
                 echo "***Phantomjs is installed successfully***"
             else
                 echo "**Phantomjs is not installed properly**"
-                sudo rm /usr/local/bin/phantomjs
-		sudo rm /usr/local/share/phantomjs
+                #sudo rm /usr/local/bin/phantomjs
+		#sudo rm /usr/local/share/phantomjs
             fi
         else
             echo "0"
@@ -65,8 +65,8 @@ else
                 echo "***Phantomjs is installed successfully***"
             else
                 echo "**Phantomjs is not installed properly**"
-                sudo rm /usr/local/bin/phantomjs
-		sudo rm /usr/local/share/phantomjs
+                #sudo rm /usr/local/bin/phantomjs
+		#sudo rm /usr/local/share/phantomjs
             fi
        fi
     fi
@@ -91,8 +91,8 @@ else
                 echo "***Slimerjs is installed successfully***"
             else
                 echo "**Slimerjs is not installed properly**"
-                sudo rm /usr/local/bin/slimerjs
-		sudo rm /usr/local/share/slimerjs
+                #sudo rm /usr/local/bin/slimerjs
+		#sudo rm /usr/local/share/slimerjs
             fi
        else
             echo "0"
@@ -107,8 +107,8 @@ else
                 echo "***Slimerjs is installed successfully***"
             else
                 echo "**Slimerjs is not installed properly**"
-                sudo rm /usr/local/bin/slimerjs
-		sudo rm /usr/local/share/slimerjs
+                #sudo rm /usr/local/bin/slimerjs
+		#sudo rm /usr/local/share/slimerjs
             fi
         fi
     fi
@@ -130,7 +130,7 @@ else
             echo "***Casperjs is installed successfully***"
         else
             echo "**Casperjs is not installed properly**"
-            sudo rm /usr/local/bin/casperjs
+            #sudo rm /usr/local/bin/casperjs
         fi
     fi
 fi
