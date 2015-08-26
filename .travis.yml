@@ -35,7 +35,8 @@ install:
 
 script:
   - ./scripts/fresh_start.sh
-  - 
+  - ./tests/Automation_Dependency_Install.sh
+  - ./tests/Run.sh
   
 on_failure:
   - ./travis-tool.sh dump_logs

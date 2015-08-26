@@ -23,7 +23,7 @@ do
 if [ ${Choice[j]} == "TRUE" ]
 then
 	echo "Current Testsuite: ${T1[j]}"
-	sudo casperjs test --engine=slimerjs ${T1[j]}/*.js --username=$U1 --password=$P1 --url=http://127.0.0.1:8080/login.R --xunit=Reports/${T1[j]}.xml
+	sudo xvfb-run -a casperjs test --engine=slimerjs ${T1[j]}/*.js --username=$U1 --password=$P1 --url=http://127.0.0.1:8080/login.R --xunit=Reports/${T1[j]}.xml
 	counter=$((counter+1))
 fi
 j=$((j+1));
