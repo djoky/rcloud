@@ -30,8 +30,8 @@ before_install:
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh setup_rcloud_config
-  - ./bootstrapR.sh
-  - ./build.sh
+  - ./scripts/bootstrapR.sh
+  - ./scripts/build.sh
 
 script:
   - ./fresh_start.sh
