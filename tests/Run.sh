@@ -24,7 +24,7 @@
 #then
 	#echo "Current Testsuite: ${T1[j]}"
 cd tests
-chmod 755 -r dataframe_div
+pwd
 sudo xvfb-run -a casperjs test --engine=slimerjs dataframe_div/*.js --username=iPrateek032 --password=P12345678k --url=http://127.0.0.1:8080/login.R --xunit=Reports/dataframe_div.xml
 	#counter=$((counter+1))
 #fi
