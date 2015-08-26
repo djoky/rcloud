@@ -35,6 +35,7 @@ install:
 
 script:
   - ./scripts/fresh_start.sh
+  - 
   
 on_failure:
   - ./travis-tool.sh dump_logs
