@@ -16,7 +16,7 @@ env:
   - SLIMERJSLAUNCHER=$(which firefox) DISPLAY=:99.0 PATH=$TRAVIS_BUILD_DIR/slimerjs:$PATH
 
 before_install:
-  - curl -OL http://raw.github.com/att/rcloud/develop/scripts/travis-tool.sh
+  - curl -OL http://raw.github.com/iPrateek032/rcloud/develop/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh aptget_install libxt-dev libcurl4-openssl-dev libcairo2-dev libreadline-dev git redis-server
@@ -30,11 +30,12 @@ before_install:
 install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh setup_rcloud_config
+  - ./bootstrapR.sh
+  - ./build.sh
 
 script:
-  - ./travis-tool.sh start_rcloud
-  - ./travis-tool.sh run_tests
-
+  - ./fresh_start.sh
+  
 on_failure:
   - ./travis-tool.sh dump_logs
   - cat /home/travis/build/cscheid/rgithub/github.Rcheck/00install.out
