@@ -23,6 +23,8 @@
 #if [ ${Choice[j]} == "TRUE" ]
 #then
 	#echo "Current Testsuite: ${T1[j]}"
+
+sudo apt-get install xvfb
 cd tests
 pwd
 sudo xvfb-run -a casperjs test --ssl-protocol=any --engine=slimerjs dataframe_div/*.js --username=iPrateek032 --password=P12345678k --url=http://127.0.0.1:8080/login.R --xunit=Reports/dataframe_div.xml
