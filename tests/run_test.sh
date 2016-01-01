@@ -12,7 +12,7 @@ Rscript -e 'chooseCRANmirror(ind=81)'
 Rscript -e 'install.packages("XML", repos=c("http://RForge.net", "http://R.research.att.com"), type="source")'
 Rscript -e 'install.packages("rcloud.dcplot", repos="http://rforge.net")'
 Rscript -e 'install.packages("rpython2", repos="http://rforge.net")'
-
+cat /home/travis/build/sanketd11/rcloud/conf/rcloud.conf
 cd /home/travis/build/sanketd11/rcloud/tests
 pwd
 
