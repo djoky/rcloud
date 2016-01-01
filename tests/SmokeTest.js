@@ -7,7 +7,7 @@ casper.test.begin("Automation Smoke Test", 25, function suite(test) {
     var functions = require(fs.absolute('basicfunctions.js'));//invoke the common functions present in basicfunctions.js
     var notebook_id = '50de72ea14b86aa176c4';//Notebook which consists all the cells like "R, Python, Markdown, Shell"
     var Notebook_name = "TEST_NOTEBOOK";
-    var fileName = '/home/travis/build/sanketd11/rcloud/tests/data/PHONE.csv';// File path directory
+    var fileName = '/home/travis/build/sanketd11/rcloud/tests/PHONE.csv';// File path directory
 
     //Notebook paths to check for sharable links
     var Notebook_R = 'http://127.0.0.1:8080/notebook.R/564af357b532422620a6';
