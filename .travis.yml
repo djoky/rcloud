@@ -27,7 +27,7 @@ before_install:
 - casperjs --version
 - sudo apt-get install python-dev
 - cd /home/travis/build/sanketd11/rcloud
-- chmod 755 ./tests/Run.sh
+- chmod 755 ./tests/run_test.sh
 - chmod 755 ./tests/Reports
 - chmod 755 ./tests/*
 install:
@@ -41,7 +41,7 @@ install:
 - cd /home/travis/build/sanketd11/rcloud/
 script:
 - ./scripts/fresh_start.sh
-- ./tests/Run.sh $TESTFOLDER
+- ./tests/run_test.sh $TESTFOLDER
 on_failure:
 - ./travis-tool.sh dump_logs
 after_success: 
