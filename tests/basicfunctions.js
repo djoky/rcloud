@@ -27,6 +27,7 @@ exports.login = function (casper, github_username, github_password, rcloud_url) 
         .then(function () {
             this.wait(8000);
             if (casper.getTitle().match(/GitHub/)) {
+
                 casper.viewport(1366, 768).then(function () {
                     this.test.assertTitleMatch(/GitHub/, "Github page has been loaded");
                     console.log("Login into GitHub with supplied username and password");
@@ -34,6 +35,7 @@ exports.login = function (casper, github_username, github_password, rcloud_url) 
                     this.sendKeys('#password', github_password);
                     this.click({type: 'css', path: "input.btn"});
                 });
+
                 casper.viewport(1366, 768).then(function () {
                     if (this.getTitle().match(/Authorize RCloud/)) {
                         this.click(".btn");
@@ -78,12 +80,11 @@ exports.validation = function (casper) {
                 {type: 'css', path: '.icon-share'},
                 'the element Shareable Link exists'
             );
-            this.then(function(){
-                this.test.assertVisible(
-                    {type: 'css', path: "#rcloud-navbar-menu > li:nth-child(7)"}, 
-                    'Logout button exists'
-                );
-            })            
+            this.wait(10000);
+            this.test.assertVisible(
+                {type: 'css', path: "#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)"},
+                'Logout button exists'
+            );
         });
 };
 
@@ -99,11 +100,13 @@ exports.search1 = function (casper, search_Content) {
                 });
                 this.echo("Opened Search div");
             }
+
             this.then(function () {
                 this.sendKeys('#input-text-search', search_Content);
                 this.wait(6000);
                 this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
             });
+
             this.wait(5000);
         });
 };
@@ -134,6 +137,7 @@ exports.addcontentstocell = function (casper, input_code) {
                     type: 'xpath',
                     path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[1]/div[2]/div/div[2]/div'
                 }, input_code);
+
                 this.click({
                     type: 'xpath',
                     path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[2]/div[2]/span[1]/i'
@@ -159,6 +163,7 @@ exports.runall = function (casper) {
             });
             this.wait(10000);
             console.log('Run-all button is clicked to execute the pre-executed cell');
+
         });
 };
 
@@ -191,6 +196,7 @@ exports.delete_notebooksIstarred = function (casper) {
                     this.click('.jqtree-selected > div:nth-child(1) > span:nth-child(2) > span:nth-child(3) > span:nth-child(1) > span:nth-child(5) > i:nth-child(1)');
                 });
             });
+
         });
 };
 
@@ -301,6 +307,7 @@ exports.peopleIstarred = function (casper) {
             do
             {
                 counter2 = counter2 + 1;
+                //this.wait(2000);
             } while (casper.visible({
                 type: 'css',
                 path: 'ul.jqtree_common:nth-child(1) > li:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + counter2 + ') > div:nth-child(1) > span:nth-child(1)'
@@ -315,6 +322,7 @@ exports.peopleIstarred = function (casper) {
                     type: 'css',
                     path: 'ul.jqtree_common:nth-child(1) > li:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + i + ') > div:nth-child(1) > span:nth-child(1)'
                 });
+                //this.echo(temp);
                 if (temp == title) {
                     flag = 1;
                     this.echo("Found notebook " + title + " in People I Starred list");
@@ -344,6 +352,7 @@ exports.allnotebooks = function (casper) {
             do
             {
                 counter3 = counter3 + 1;
+                //this.wait(2000);
             } while (casper.visible({
                 type: 'css',
                 path: 'ul.jqtree_common:nth-child(1) > li:nth-child(3) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + counter3 + ') > div:nth-child(1) > span:nth-child(1)'
@@ -353,10 +362,12 @@ exports.allnotebooks = function (casper) {
             var flag = 0;//flag variable to test if the Notebook was found in the div
             var starcount = 0;//checking the starcount of the notebook under this div
             for (var i = 1; i <= counter3; i++) {
+                //this.wait(2000);
                 var temp = this.fetchText({
                     type: 'css',
                     path: 'ul.jqtree_common:nth-child(1) > li:nth-child(3) > ul:nth-child(2) > li:nth-child(1) > ul:nth-child(2) > li:nth-child(' + i + ') > div:nth-child(1) > span:nth-child(1)'
                 });
+                //this.echo(temp);
                 if (temp == title) {
                     flag = 1;
                     this.echo("Found notebook " + title + " in All notebooks list");
@@ -380,7 +391,7 @@ exports.allnotebooks = function (casper) {
 exports.comments = function (casper, comment) {
     return casper
         .then(function () {
-            if (this.visible({type: "xpath", path: ".//*[@id='collapse-comments']/div"})) {
+            if (this.visible({type:"xpath", path:".//*[@id='collapse-comments']/div"})) {
                 this.echo('Comment div is open');
                 this.wait(5000);
                 this.click('#comment-entry-body')
@@ -388,17 +399,17 @@ exports.comments = function (casper, comment) {
             else {
                 this.echo('Comment div is not open,hence opening it');
                 this.wait(3000);
+                // var z = casper.evaluate(function () {
+                //     $('#accordion-right > div:nth-child(5) > div:nth-child(1)').click();
+                // });
                 this.click('#accordion-right > div:nth-child(5) > div:nth-child(1)');
                 this.wait(2000);
                 this.click('#comment-entry-body')
             }
-            this.then(function () {
+            this.then(function(){
                 this.sendKeys('#comment-entry-body', comment);
                 this.wait(3000);
-                this.test.assertTruthy(this.click({
-                    type: 'css',
-                    path: '#comment-submit'
-                }), 'comment entered successfully');
+                this.test.assertTruthy(this.click({type: 'css', path: '#comment-submit'}), 'comment entered successfully');
             })
         });
 };
