@@ -82,7 +82,7 @@ exports.validation = function (casper) {
             );
             this.wait(10000);
             this.test.assertExists(
-                {type: 'css', path: "#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)"},
+                {type: 'xpath', path: "//*[@id='rcloud-navbar-menu']/li[7]/a"}, 
                 'Logout button exists'
             );
         });
