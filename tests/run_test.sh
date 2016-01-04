@@ -15,7 +15,6 @@ Rscript -e 'install.packages("rpython2", repos="http://rforge.net")'
 cat /home/travis/build/sanketd11/rcloud/conf/rcloud.conf
 cd /home/travis/build/sanketd11/rcloud/tests
 pwd
-
 echo "Executing testscripts from $1"
 sudo xvfb-run -a casperjs test --ssl-protocol=any --engine=slimerjs $1 --username=iPrateek032 --password=P12345678k --url=http://127.0.0.1:8080/login.R --xunit=Reports/report.xml
 
