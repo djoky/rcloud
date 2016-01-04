@@ -1,5 +1,5 @@
 addons:
-  firefox: '25.0'
+  firefox: '42.0'
 language: c
 env:
   matrix:
