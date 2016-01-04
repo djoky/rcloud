@@ -78,11 +78,12 @@ exports.validation = function (casper) {
                 {type: 'css', path: '.icon-share'},
                 'the element Shareable Link exists'
             );
-            this.wait(10000);
-            this.test.assertVisible(
-                {type: 'css', path: "#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)"},
-                'Logout button exists'
-            );
+            this.then(function(){
+                this.test.assertVisible(
+                    {type: 'css', path: "#rcloud-navbar-menu > li:nth-child(7)"}, 
+                    'Logout button exists'
+                );
+            })            
         });
 };
 
