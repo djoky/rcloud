@@ -81,7 +81,7 @@ exports.validation = function (casper) {
                 'the element Shareable Link exists'
             );
             this.wait(10000);
-            this.test.assertVisible(
+            this.test.assertExists(
                 {type: 'css', path: "#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)"},
                 'Logout button exists'
             );
