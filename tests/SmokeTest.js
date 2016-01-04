@@ -27,8 +27,9 @@ casper.test.begin("Automation Smoke Test", 25, function suite(test) {
     });
 
     casper.then(function () {
+        this.capture("edit_html.png")
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
-        functions.validation(casper);
+        functions.validation(casper);   
         this.wait(4000);
     });
 
