@@ -1,4 +1,9 @@
-casper.test.begin("Automation Smoke Test", 25, function suite(test) {
+var casper = require('casper').create({
+    verbose: true,
+    logLevel: "debug"
+});
+
+casper.test.begin("Automation Smoke Test", 31, function suite(test) {
 
     var x = require('casper').selectXPath;//required if we detect an element using xpath
     var github_username = casper.cli.options.username;//user input github username
@@ -16,6 +21,7 @@ casper.test.begin("Automation Smoke Test", 25, function suite(test) {
     var View = "http://127.0.0.1:8080/view.html?notebook=638ccc3aaeb391cc9888";
     var content = '"Welcome to RCloud"'
     var URL, url, NB_ID;
+    var errors=[];
     casper.options.WaitTimeout = 20000
 
     casper.start(rcloud_url, function () {
@@ -299,6 +305,33 @@ casper.test.begin("Automation Smoke Test", 25, function suite(test) {
         }, 60000);
     });
 
+    //Shiny
+    casper.then(function () {
+        this.thenOpen("http://127.0.0.1:8080/shiny.html?notebook=15a6054f8afd195302ef");
+        casper.on('resource.received', function(resource) {
+    var status = resource.status;
+    if(status >= 400) {
+        casper.log('Resource ' + resource.url + ' failed to load (' + status + ')', 'error');
+
+        resourceErrors.push({
+            url: resource.url,
+            status: resource.status
+        });
+    }
+});
+        this.wait(5000);
+        this.waitForSelector('.col-sm-12', function () {
+            this.echo('Content is visible');
+            this.test.assertVisible("div.row:nth-child(2)", "Confirmed that User is able to open Shiny Notebook");
+            this.capture('./Images/shiny_login.png')
+        },function(){
+        this.echo("In the timeout function")
+        this.capture('./Images/shiny_login_timeout.png')
+    }, 60000);
+        
+    });
+
+
     //VIEW.HTML
     casper.viewport(1024, 768).then(function () {
         this.thenOpen("http://127.0.0.1:8080/view.html?notebook=8ce30fba0e60d70e75fe");
@@ -336,6 +369,122 @@ casper.test.begin("Automation Smoke Test", 25, function suite(test) {
         })
     });
 
+
+//     casper.wait(3000);
+
+    //Now Open the Mini, Shiny.html, Notebook.R and view.html Notebook as Anonymous user
+    casper.then(function () {
+        console.log(" Open the Mini, Shiny.html, Notebook.R and view.html Notebook as Anonymous user")
+});
+        casper.then(function () {
+            this.thenOpen(URL);
+            this.then(function(){
+            if (this.visible('.modal-body')){
+                this.echo('Session reconnect')
+                this.click(".btn-primary")
+                this.then(function(){
+                    this.echo('Validation to ensure page load')
+                    functions.validation(casper);
+                })
+            }
+            else{
+                this.echo('Validation to ensure page load')
+                functions.validation(casper);
+            }
+        }) 
+        });
+
+//         casper.then(function (){
+//             this.wait(5000);
+//             functions.open_advanceddiv(casper);
+//             this.click("#publish_notebook");
+//             console.log("Notebook published");
+
+//         });
+
+
+
+        //Logout from the RCloud
+        casper.then(function () {
+            this.wait(2000)
+            this.mouse.click("#rcloud-navbar-menu > li:nth-child(7) > a:nth-child(1)"); 
+            console.log('Logging out from the RCloud');
+            
+            this.then(function(){
+                //this.capture('./Images/Rcloud_logout.png')
+                this.echo(this.getTitle());
+                // var log = this.fetchText("#main-div > p:nth-child(2) > a:nth-child(1))");
+                // this.echo(log);
+            })
+            
+            
+        });
+
+//     });
+//     casper.wait(8000);
+//Notebook.R
+    casper.then(function () {
+        this.thenOpen("http://127.0.0.1:8080/notebook.R/564af357b532422620a6");
+        this.wait(5000);
+        this.waitForSelector('body > form:nth-child(1)', function () {
+            this.echo('Content is visible');
+            this.test.assertVisible("body > img:nth-child(2)", "Confirmed that User is able to open Notebook.R Notebook");  
+            //this.capture('./Images/notebook_r_anonymous.png')
+        },function(){
+        this.echo("In the timeout function")
+        //this.capture('./Images/notebook_r_anonymous_timeout.png')
+    }, 60000);
+        
+    });
+
+    //Mini
+    casper.then(function () {
+        this.thenOpen("http://127.0.0.1:8080/mini.html?notebook=f03ca14c9963e5718527");
+        this.wait(5000);
+        this.waitForSelector('#chartdiv0', function () {
+            this.echo('Content is visible');
+            this.test.assertVisible("#chartdiv0", "Confirmed that User is able to open Mini Notebook");
+            //this.capture('./Images/mini_anonymoys.png')
+    }, function(){
+        this.echo("In the timeout function")
+        //this.capture('./Images/mini_anonymoys_timeout.png')
+    } ,60000);
+        
+});
+
+
+
+    casper.then(function () {
+        this.thenOpen("http://127.0.0.1:8080/shiny.html?notebook=15a6054f8afd195302ef");
+        this.wait(5000);
+        this.waitForSelector('.col-sm-12', function () {
+            this.echo('Content is visible');
+            this.test.assertVisible("div.row:nth-child(2)", "Confirmed that User is able to open Shiny Notebook");
+            //this.capture('./Images/shiny_anonymoys.png')
+        },function(){
+        this.echo("In the timeout function")
+        //this.capture('./Images/shiny_anonymoys_timeout.png')
+    }, 60000);
+        
+    });
+
+    //VIEW.HTML
+    casper.viewport(1024, 768).then(function () {
+        this.thenOpen("http://127.0.0.1:8080/view.html?notebook=638ccc3aaeb391cc9888");
+        // this.echo(this.getCurrentUrl());
+        this.wait(5000);
+        this.waitForSelector('.r-result-div', function () {   
+            this.echo('Content is visible');
+            this.test.assertVisible(".r-result-div", "Confirmed that User is able to open View.html Notebook");
+            //this.capture('./Images/view_anonymoys.png')
+        }, function(){
+        this.echo("In the timeout function")
+        //this.capture('./Images/view_anonymoys.png')
+    }, 60000);
+        
+    });
+
+
 //Open Notebook in GitHub
     casper.viewport(1366, 768).then(function () {
         this.waitForSelector({type: 'css', path: '#open_in_github'}, function () {
@@ -361,7 +510,21 @@ casper.test.begin("Automation Smoke Test", 25, function suite(test) {
         });
     });
 
-    casper.run(function () {
-        test.done();
+    //Registering to the page.errors actually not required but still if there are some errors found on the page it will gives us the details
+    casper.on("page.error", function(msg, trace) {
+      this.echo("Error:    " + msg, "ERROR");
+      this.echo("file:     " + trace[0].file, "WARNING");
+      this.echo("line:     " + trace[0].line, "WARNING");
+      this.echo("function: " + trace[0]["function"], "WARNING");
+      errors.push(msg);
+    });
+    
+    casper.run(function() {
+      if (errors.length > 0) {
+        this.echo(errors.length + ' Javascript errors found', "WARNING");
+      } else {
+        this.echo(errors.length + ' Javascript errors found', "INFO");
+      }
+      test.done();
     });
 });
